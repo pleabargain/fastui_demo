@@ -37,3 +37,6 @@ INFO:     Started reloader process [15824] using StatReload
 INFO:     Started server process [1352]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.```
+
+# notes
+I tried to get ChatGPT to rewrite the code for me to take a JS array convert it to JSON but no joy. that's the badmain.py
