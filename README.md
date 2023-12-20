@@ -1,6 +1,11 @@
+# code
+https://github.com/pleabargain/fastui_demo
 
+# demo of fastui
+This is proof that the sample code from 
+* https://github.com/pydantic/FastUI
 
-running the demo of fastui
+works as advertised.
 
 # requirements
 
