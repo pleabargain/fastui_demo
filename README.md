@@ -40,3 +40,9 @@ INFO:     Application startup complete.```
 
 # notes
 I tried to get ChatGPT to rewrite the code for me to take a JS array convert it to JSON but no joy. that's the badmain.py
+
+# o.py
+is the original working code
+
+# main.py
+I asked GPT4 to generate sample python objects and then to rewrite o.py to match my data. It worked.

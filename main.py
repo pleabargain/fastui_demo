@@ -9,68 +9,70 @@ from pydantic import BaseModel, Field
 
 app = FastAPI()
 
+app = FastAPI()
 
-class User(BaseModel):
+class Property(BaseModel):
     id: int
     name: str
-    dob: date = Field(title='Date of Birth')
+    country: str
 
-
-# define some users
-users = [
-    User(id=1, name='John', dob=date(1990, 1, 1)),
-    User(id=2, name='Jack', dob=date(1991, 1, 1)),
-    User(id=3, name='Jill', dob=date(1992, 1, 1)),
-    User(id=4, name='Jane', dob=date(1993, 1, 1)),
+# Define some properties
+properties = [
+    Property(id=1, name='Sunset Villa', country='USA'),
+    Property(id=2, name='Mountain Retreat', country='Canada'),
+    Property(id=3, name='Beachfront Bungalow', country='Australia'),
+    Property(id=4, name='Urban Apartment', country='Japan'),
+    Property(id=5, name='Countryside Cottage', country='France'),
+    Property(id=6, name='Lakeside Cabin', country='Finland'),
+    Property(id=7, name='City Loft', country='Germany'),
+    Property(id=8, name='Island Getaway', country='Maldives'),
+    Property(id=9, name='Desert Oasis', country='Morocco'),
+    Property(id=10, name='Rainforest Hideaway', country='Brazil')
 ]
 
-
 @app.get("/api/", response_model=FastUI, response_model_exclude_none=True)
-def users_table() -> list[AnyComponent]:
+def properties_table() -> list[AnyComponent]:
     """
-    Show a table of four users, `/api` is the endpoint the frontend will connect to
+    Show a table of properties, `/api` is the endpoint the frontend will connect to
     when a user visits `/` to fetch components to render.
     """
     return [
-        c.Page(  # Page provides a basic container for components
+        c.Page(
             components=[
-                c.Heading(text='Users', level=2),  # renders `<h2>Users</h2>`
-                c.Table[User](  # c.Table is a generic component parameterized with the model used for rows
-                    data=users,
-                    # define two columns for the table
+                c.Heading(text='Properties', level=2),
+                c.Table[Property](
+                    data=properties,
                     columns=[
-                        # the first is the users, name rendered as a link to their profile
-                        DisplayLookup(field='name', on_click=GoToEvent(url='/user/{id}/')),
-                        # the second is the date of birth, rendered as a date
-                        DisplayLookup(field='dob', mode=DisplayMode.date),
+                        DisplayLookup(field='name', on_click=GoToEvent(url='/property/{id}/')),
+                        DisplayLookup(field='country'),
                     ],
                 ),
             ]
         ),
     ]
 
-
-@app.get("/api/user/{user_id}/", response_model=FastUI, response_model_exclude_none=True)
-def user_profile(user_id: int) -> list[AnyComponent]:
+@app.get("/api/property/{property_id}/", response_model=FastUI, response_model_exclude_none=True)
+def property_profile(property_id: int) -> list[AnyComponent]:
     """
-    User profile page, the frontend will fetch this when the user visits `/user/{id}/`.
+    Property profile page, the frontend will fetch this when the user visits `/property/{id}/`.
     """
     try:
-        user = next(u for u in users if u.id == user_id)
+        property = next(p for p in properties if p.id == property_id)
     except StopIteration:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Property not found")
     return [
         c.Page(
             components=[
-                c.Heading(text=user.name, level=2),
+                c.Heading(text=property.name, level=2),
                 c.Link(components=[c.Text(text='Back')], on_click=BackEvent()),
-                c.Details(data=user),
+                c.Details(data=property),
             ]
         ),
     ]
-
 
 @app.get('/{path:path}')
 async def html_landing() -> HTMLResponse:
     """Simple HTML page which serves the React app, comes last as it matches all paths."""
     return HTMLResponse(prebuilt_html(title='FastUI Demo'))
+
+# Note: Remember to also import the necessary dependencies for the new components
